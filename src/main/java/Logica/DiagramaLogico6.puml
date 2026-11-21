@@ -1,0 +1,135 @@
+
+@startuml
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+package Logica {
+
+    class AlgoritmosOrdenamiento {
+        {static} +insercion(a: Registro[], comp: Comparator<Registro>): void
+        {static} +seleccion(a: Registro[], comp: Comparator<Registro>): void
+        {static} +shell(a: Registro[], comp: Comparator<Registro>): void
+        {static} +quickSort(A: Registro[], ini: int, fin: int, comp: Comparator<Registro>): void
+        {static} +mergeSort(a: Registro[], comp: Comparator<Registro>): void
+        {static} -merge(a: Registro[], izq: Registro[], der: Registro[], comp: Comparator<Registro>): void
+        {static} +parallelSort(a: Registro[], comp: Comparator<Registro>): void
+        {static} +arrayListSort(lista: ArrayList<Registro>, comp: Comparator<Registro>): void
+        {static} +medirTiempo(metodo: String, datosOriginales: List<Registro>, comp: Comparator<Registro>): Resultados
+        {static} +medirTodos(datosOriginales: List<Registro>, comp: Comparator<Registro>): List<Resultados>
+    }
+
+    class Archivo {
+        -listaRegistro: List<Registro>
+        -rutaArchivo: String
+        +Archivo()
+        +getListaRegistro(): List<Registro>
+        +cargarArchivo(): void
+        -convertirDouble(dato: String): double
+    }
+
+    class Registro {
+        -intervaloEvidencia: String
+        -id_Cancion: String
+        -artista: String
+        -cancion: String
+        -genero: String
+        -id_Track: String
+        -track_URL: String
+        -track_Duracion: double
+        -track_Explicito: boolean
+        -track_Album: String
+        -danzabilidad: double
+        -energia: double
+        -clave: double
+        -volumen: double
+        -modo: double
+        -speechiness: double
+        -acustico: double
+        -instrumental: double
+        -vivacidad: double
+        -valence: double
+        -tempo: double
+        -compas: double
+        -track_Popularidad: double
+        -posicion_Peak: double
+        -semanas: String
+        -primeraSemana: String
+        -ultimaSemana: String
+        -nivelExitoListas: String
+        -perfilExitoLongevidad: String
+        -conjuntoAmbientesAcusticos: String
+        -eraMusical: String
+        -COT: String
+        -puntuacionConfianza: double
+
+        +Registro(id_Cancion: String, artista: String, cancion: String, genero: String, id_Track: String, track_URL: String, track_Duracion: double, track_Explicito: boolean,
+         track_Album: String, danzabilidad: double, energia: double, clave: double, volumen: double, modo: double, speechiness: double, acustico: double, instrumental: double,
+         vivacidad: double, valence: double, tempo: double, compas: double, track_Popularidad: double, posicion_Peak: double, semanas: String, primeraSemana: String, ultimaSemana: String,
+         nivelExitoListas: String, perfilExitoLongevidad: String, conjuntoAmbientesAcusticos: String, eraMusical: String, intervaloEvidencia: String, COT: String, puntuacionConfianza: double)
+
+        +getId_Cancion(): String
+        +getArtista(): String
+        +getCancion(): String
+        +getGenero(): String
+        +getId_Track(): String
+        +getTrack_URL(): String
+        +getTrack_Duracion(): double
+        +isTrack_Explicito(): boolean
+        +getTrack_Album(): String
+        +getDanzabilidad(): double
+        +getEnergia(): double
+        +getClave(): double
+        +getVolumen(): double
+        +getModo(): double
+        +getSpeechiness(): double
+        +getAcustico(): double
+        +getInstrumental(): double
+        +getVivacidad(): double
+        +getValence(): double
+        +getTempo(): double
+        +getCompas(): double
+        +getTrack_Popularidad(): double
+        +getPosicion_Peak(): double
+        +getSemanas(): String
+        +getPrimeraSemana(): String
+        +getUltimaSemana(): String
+        +getNivelExitoListas(): String
+        +getPerfilExitoLongevidad(): String
+        +getConjuntoAmbientesAcusticos(): String
+        +getEraMusical(): String
+        +getIntervaloEvidencia(): String
+        +getCOT(): String
+        +getPuntuacionConfianza(): double
+    }
+
+    class Resultados {
+        -metodo: String
+        -tiempoMs: double
+        -datosOrdenados: List<Registro>
+        +Resultados(metodo: String, tiempoMs: double, datosOrdenados: List<Registro>)
+        +getMetodo(): String
+        +getTiempoMs(): double
+        +getDatosOrdenados(): List<Registro>
+    }
+
+    class SelectorComparador {
+        {static} +obtenerComparador(columna: String, ascendente: boolean): Comparator<Registro>
+        {static} -compararTexto(texto1: String, texto2: String): int
+    }
+}
+
+' Relaciones entre clases
+
+Archivo "1" o-- "0..*" Registro : administra
+
+AlgoritmosOrdenamiento ..> Registro : ordena
+AlgoritmosOrdenamiento ..> Resultados : genera
+AlgoritmosOrdenamiento ..> Comparator : utiliza
+AlgoritmosOrdenamiento ..> List : utiliza
+
+Resultados "1" o-- "0..*" Registro : contiene
+
+SelectorComparador ..> Registro : compara
+SelectorComparador ..> Comparator : crea
+
+@enduml

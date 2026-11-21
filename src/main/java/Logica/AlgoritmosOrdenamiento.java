@@ -4,7 +4,6 @@ import java.util.*;
 
 public class AlgoritmosOrdenamiento {
 
-    // 1. INSERCIÓN
     public static void insercion(Registro[] a, Comparator<Registro> comp) {
         int n = a.length;
         for (int i = 1; i < n; i++) {
@@ -18,7 +17,6 @@ public class AlgoritmosOrdenamiento {
         }
     }
 
-    // 2. SELECCIÓN
     public static void seleccion(Registro[] a, Comparator<Registro> comp) {
         int n = a.length;
         for (int i = 0; i < n - 1; i++) {
@@ -35,7 +33,6 @@ public class AlgoritmosOrdenamiento {
         }
     }
 
-    // 3. SHELL
     public static void shell(Registro[] a, Comparator<Registro> comp) {
         int n = a.length;
         int inter = n / 2;
@@ -58,7 +55,6 @@ public class AlgoritmosOrdenamiento {
         }
     }
 
-    // 4. QUICKSORT (Tu misma lógica adaptada a Comparator)
     public static void quickSort(Registro[] A, int ini, int fin, Comparator<Registro> comp) {
         int izq = ini;
         int der = fin;
@@ -88,18 +84,15 @@ public class AlgoritmosOrdenamiento {
                 }
             }
         }
-
         if (ini < (pos - 1)) quickSort(A, ini, pos - 1, comp);
         if ((pos + 1) < fin) quickSort(A, pos + 1, fin, comp);
     }
 
-    // 5. MERGESORT (El que faltaba)
     public static void mergeSort(Registro[] a, Comparator<Registro> comp) {
         if (a.length < 2) return;
         int mid = a.length / 2;
         Registro[] izq = Arrays.copyOfRange(a, 0, mid);
         Registro[] der = Arrays.copyOfRange(a, mid, a.length);
-
         mergeSort(izq, comp);
         mergeSort(der, comp);
         merge(a, izq, der, comp);
@@ -122,23 +115,21 @@ public class AlgoritmosOrdenamiento {
         Arrays.parallelSort(a, comp);
     }
 
-    // 7. SORT DE ARRAYLIST (Nativo de List/ArrayList)
     public static void arrayListSort(ArrayList<Registro> lista, Comparator<Registro> comp) {
         lista.sort(comp);
     }
 
-    // Mide el tiempo de UN solo método
-    public static ResultadoOrdenamiento medirTiempo(String metodo, List<Registro> datosOriginales, Comparator<Registro> comp) {
+    public static Resultados medirTiempo(String metodo, List<Registro> datosOriginales, Comparator<Registro> comp) {
         Registro[] copiaArreglo = datosOriginales.toArray(new Registro[0]);
         ArrayList<Registro> copiaLista = null;
-
+        //toma el tiempo inicial
         long inicio = System.nanoTime();
 
         switch (metodo) {
-            case "Inserción":
+            case "Insercion":
                 insercion(copiaArreglo, comp);
                 break;
-            case "Selección":
+            case "Seleccion":
                 seleccion(copiaArreglo, comp);
                 break;
             case "Shell":
@@ -158,18 +149,18 @@ public class AlgoritmosOrdenamiento {
                 arrayListSort(copiaLista, comp);
                 break;
         }
-
+        //toma el tiempo final
         long fin = System.nanoTime();
         double tiempoMs = (fin - inicio) / 1_000_000.0;
 
         List<Registro> ordenados = (copiaLista != null) ? copiaLista : Arrays.asList(copiaArreglo);
-        return new ResultadoOrdenamiento(metodo, tiempoMs, ordenados);
+        return new Resultados(metodo, tiempoMs, ordenados);
     }
 
-    // Mide el tiempo de TODOS los métodos a la vez (para cuando el usuario elija "Todos")
-    public static List<ResultadoOrdenamiento> medirTodos(List<Registro> datosOriginales, Comparator<Registro> comp) {
-        String[] metodos = {"Inserción", "Selección", "Shell", "QuickSort", "MergeSort", "ParallelSort", "ArrayList.sort"};
-        List<ResultadoOrdenamiento> resultados = new ArrayList<>();
+   //este metodo mide el tiempo para todos los metodos cuando se ingresa la opcion de todos
+    public static List<Resultados> medirTodos(List<Registro> datosOriginales, Comparator<Registro> comp) {
+        String[] metodos = {"Insercion", "Seleccion", "Shell", "QuickSort", "MergeSort", "ParallelSort", "ArrayList.sort"};
+        List<Resultados> resultados = new ArrayList<>();
 
         for (String metodo : metodos) {
             resultados.add(medirTiempo(metodo, datosOriginales, comp));

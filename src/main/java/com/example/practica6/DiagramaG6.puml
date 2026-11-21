@@ -1,0 +1,112 @@
+
+@startuml
+title Diagrama de Clases - Billboard Hot 100
+
+skinparam classAttributeIconSize 0
+skinparam style strictuml
+skinparam shadowing false
+skinparam linetype ortho
+
+skinparam class {
+    BackgroundColor #EAF2F8
+    BorderColor #2874A6
+    ArrowColor #34495E
+}
+
+package "com.example.practica6" {
+
+    class HelloApplication {
+        +start(stage: Stage): void
+        +main(args: String[]): void
+    }
+
+    class Fondo {
+        -panel: BorderPane
+        -listaOriginal: List<Registro>
+        -vistaTabla: Tablas
+        -comboMetodo: ComboBox<String>
+        -rbAsc: RadioButton
+        -rbDesc: RadioButton
+        -lblEstado: Label
+        -lblTiempos: Label
+        -graficaRendimiento: BarChart<String, Number>
+
+        +Fondo(listaOriginal: List<Registro>)
+        +getPanel(): Pane
+
+        -construirPanelSuperior(): void
+        -construirTablaCentral(): void
+        -construirGraficaInferior(): void
+        -ordenarPorColumna(nombreColumna: String): void
+        -actualizarGrafica(resultados: List<Resultados>, columna: String, direccion: String, tiempos: List<String>): void
+    }
+
+    class Tablas {
+        -tabla: TableView<Registro>
+        -datosTabla: ObservableList<Registro>
+        -clickearColumna: Consumer<String>
+
+        +Tablas(registrosIniciales: List<Registro>, clickearColumna: Consumer<String>)
+        +getTabla(): TableView<Registro>
+        +actualizarDatos(nuevosDatos: List<Registro>): void
+
+        -construirColumnas(datos: List<Registro>): void
+        -agregarTexto(titulo: String, datos: List<Registro>, numero: int): void
+        -agregarNumero(titulo: String, datos: List<Registro>, numero: int): void
+        -agregarBooleano(titulo: String, datos: List<Registro>): void
+        -crearEncabezado(titulo: String, resumen: Node): VBox
+        -crearHistograma(datos: List<Registro>, numero: int): Canvas
+        -obtenerNumero(r: Registro, numero: int): double
+        -crearGraficaPastel(verdaderos: int, total: int): Canvas
+    }
+}
+
+package "Logica" {
+
+    class Archivo {
+        +cargarArchivo(): void
+        +getListaRegistro(): List<Registro>
+    }
+
+    class Registro
+
+    class AlgoritmosOrdenamiento {
+        {static} +medirTodos(lista: List<Registro>, comparador: Comparator<Registro>): List<Resultados>
+        {static} +medirTiempo(metodo: String, lista: List<Registro>, comparador: Comparator<Registro>): Resultados
+    }
+
+    class SelectorComparador {
+        {static} +obtenerComparador(nombreColumna: String, esAscendente: boolean): Comparator<Registro>
+    }
+
+    class Resultados {
+        +getMetodo(): String
+        +getTiempoMs(): double
+        +getDatosOrdenados(): List<Registro>
+    }
+}
+
+' Relaciones principales
+
+HelloApplication ..> Archivo : crea
+HelloApplication ..> Fondo : crea
+HelloApplication ..> Scene : utiliza
+
+Fondo *-- Tablas : contiene
+Fondo --> Registro : listaOriginal
+Fondo ..> AlgoritmosOrdenamiento : utiliza
+Fondo ..> SelectorComparador : utiliza
+Fondo ..> Resultados : utiliza
+
+Tablas --> Registro : muestra y actualiza
+
+Archivo --> Registro : carga registros
+
+AlgoritmosOrdenamiento ..> Registro : ordena
+AlgoritmosOrdenamiento ..> Resultados : genera
+
+SelectorComparador ..> Registro : compara
+
+Resultados --> Registro : datos ordenados
+
+@enduml
